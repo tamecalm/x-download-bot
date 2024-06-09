@@ -37,13 +37,8 @@ def download_video(update: Update, context: CallbackContext):
             video_url = tweet.extended_entities["media"][0]["video_info"]["variants"][0]["url"]
             # Download video
             video_file = requests.get(video_url)
-            # Save video locally
-            with open("downloaded_video.mp4", "wb") as file:
-                file.write(video_file.content)
             # Send video to user
-            bot.send_video(chat_id=update.message.chat_id, video=open("downloaded_video.mp4", "rb"))
-            # Delete the local video file
-            os.remove("downloaded_video.mp4")
+            bot.send_video(chat_id=update.message.chat_id, video=video_file.content)
         else:
             update.message.reply_text("The provided tweet does not contain a video.")
     except tweepy.TweepError as e:
